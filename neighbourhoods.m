@@ -1,3 +1,6 @@
+% many neighbourhood operators
+
+
 %% Read in image
 
 F = imread('monarch.png'); % Opens file for reading
