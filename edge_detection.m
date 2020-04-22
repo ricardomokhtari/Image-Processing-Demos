@@ -3,6 +3,12 @@
 X = imread('leaf.png');
 X = rgb2gray(X);
 
+%% Canny edge detector
+
+I = edge(X, 'canny');
+imagesc(I)
+colormap(gray(128))
+
 %% Gradient-Based Edge Detection
 
 figure(1) % display original image
@@ -83,7 +89,7 @@ colormap(gray(128))
 %% LoG implementation
 
 % create Gaussian
-sigma = 3;
+sigma = 1;
 J = fspecial('gauss',[128,128],sigma);
 
 % create Laplacian
