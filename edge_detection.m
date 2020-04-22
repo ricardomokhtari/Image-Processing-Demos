@@ -1,9 +1,7 @@
 %% Load image
 
-fid = fopen('head.128','r'); % Opens file for reading
-[x, ~]=fread(fid,[128,128],'uchar');
-X = x';
-fclose(fid); % Close the file handle
+X = imread('leaf.png');
+X = rgb2gray(X);
 
 %% Gradient-Based Edge Detection
 
@@ -26,6 +24,7 @@ g = sqrt(res.^2 + res2.^2);
 figure(2)
 imagesc(g)
 colormap(gray(128))
+colorbar
 
 % create edge direction field
 [x,y] = meshgrid(1:size(X,2),1:size(X,1));
@@ -34,10 +33,17 @@ figure(3)
 imagesc(g); hold on
 quiver(x,y,res,res2,5);
 
-%% Edge detection + Gaussian blurring
+figure(4)
+imagesc(g > 30)
+colormap(gray(128))
+
+% The thresholded image has many spurious edges, these can be removed with
+% Gaussian blurring (see next)
+
+%% Edge detection + Gaussian blurring (to fine tune edge size)
 
 % 2D Gaussian
-sigma = 1;
+sigma = 3;
 J = fspecial('gauss',[65,65],sigma);
 
 % display original image
@@ -68,13 +74,17 @@ colormap(gray(128))
 
 % show surface plot of the edge map
 figure(4)
-surfl(g)
+surfl(abs(g))
+
+figure(5)
+imagesc(g > 10)
+colormap(gray(128))
 
 %% LoG implementation
 
 % create Gaussian
-sigma = 1;
-J = fspecial('gauss',[65,65],sigma);
+sigma = 3;
+J = fspecial('gauss',[128,128],sigma);
 
 % create Laplacian
 Laplacian = [2 -1 2; -1 -4 -1; 2 -1 2] ./ 16;
@@ -93,5 +103,9 @@ surfl(-LoG)
 figure(2)
 imagesc(abs(res));
 colormap(gray(128))
+colorbar
+
+% the zero crossing points need to be found after this step
+% Edge linking is performed after that
 
 
