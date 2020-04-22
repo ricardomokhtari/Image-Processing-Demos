@@ -70,28 +70,14 @@ colormap(gray(128))
 figure(4)
 surfl(g)
 
-%% LoG implementation
+%%
+mask2 = [2 -1 2; -1 -4 -1; 2 -1 2] ./ 16;
+LoG = conv2(J,mask2,'same');
 
-% create Gaussian
-sigma = 1;
-J = fspecial('gauss',[65,65],sigma);
+thing = conv2(X, LoG, 'same');
 
-% create Laplacian
-Laplacian = [2 -1 2; -1 -4 -1; 2 -1 2] ./ 16;
-
-% create Laplacian of Gaussian
-LoG = conv2(J, Laplacian,'same');
-
-% convolve LoG with image
-res = conv2(X, LoG, 'same');
-
-% display LoG
-figure(1)
-surfl(-LoG)
-
-% display final edge map
-figure(2)
-imagesc(abs(res));
+figure(5)
+imagesc(abs(thing));
 colormap(gray(128))
 
 
